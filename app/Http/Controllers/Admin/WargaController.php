@@ -4,16 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
-use Illuminate\Support\Facades\Storage;
 use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class WargaController extends Controller
 {
     public function index()
     {
-        // Ambil semua user dengan role "user"
         $warga = User::where('role', 'user')->get();
-
         return view('admin.warga', compact('warga'));
     }
 
@@ -24,18 +22,34 @@ class WargaController extends Controller
     {
         $warga = User::where('role', 'user')->findOrFail($id);
 
-        // Hapus foto KTP jika ada
+        // ===============================
+        // HAPUS FOTO KTP DI CLOUDINARY
+        // ===============================
         if ($warga->ktp) {
-             // Extract public ID (assuming simple folder structure 'ktp/filename')
-             $publicId = 'ktp/' . pathinfo($warga->ktp, PATHINFO_FILENAME);
-             try {
+            try {
+                /**
+                 * Contoh ktp:
+                 * https://res.cloudinary.com/demo/image/upload/v123456/ktp/abc123.jpg
+                 */
+
+                // Ambil public_id dari URL Cloudinary
+                $publicId = pathinfo(parse_url($warga->ktp, PHP_URL_PATH), PATHINFO_FILENAME);
+
+                // Jika ada folder ktp/
+                if (str_contains($warga->ktp, '/ktp/')) {
+                    $publicId = 'ktp/' . $publicId;
+                }
+
                 Cloudinary::destroy($publicId);
-             } catch (\Exception $e) {
-                 // Log error or ignore if already deleted
-             }
+
+            } catch (\Exception $e) {
+                Log::warning('Gagal hapus KTP Cloudinary: ' . $e->getMessage());
+            }
         }
 
-        // Hapus data warga
+        // ===============================
+        // HAPUS DATA DATABASE
+        // ===============================
         $warga->delete();
 
         return redirect()->back()->with('success', 'Data warga berhasil dihapus');
