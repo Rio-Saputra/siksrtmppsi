@@ -58,17 +58,7 @@ Route::get('/user/kegiatan/{id}', [KegiatanController::class, 'show'])->name('us
 Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
 Route::get('/admin/kegiatan', [AdminController::class, 'kegiatan'])->name('admin.kegiatan');
 
-Route::get('/run-migration', function () {
-    try {
-        \Illuminate\Support\Facades\Artisan::call('migrate:refresh', [
-            '--path' => 'database/migrations/2025_12_16_062112_create_kegiatan_table.php',
-            '--force' => true
-        ]);
-        return 'Migration Success: ' . \Illuminate\Support\Facades\Artisan::output();
-    } catch (\Exception $e) {
-        return 'Migration Failed: ' . $e->getMessage();
-    }
-});
+
 
 
 
