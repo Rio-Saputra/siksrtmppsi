@@ -28,19 +28,23 @@ class WargaController extends Controller
         if ($warga->ktp) {
             try {
                 /**
-                 * Contoh ktp:
-                 * https://res.cloudinary.com/demo/image/upload/v123456/ktp/abc123.jpg
+                 * Contoh URL:
+                 * https://res.cloudinary.com/xxx/image/upload/v123456/ktp/abc123.jpg
                  */
 
-                // Ambil public_id dari URL Cloudinary
-                $publicId = pathinfo(parse_url($warga->ktp, PHP_URL_PATH), PATHINFO_FILENAME);
+                // Ambil path URL
+                $path = parse_url($warga->ktp, PHP_URL_PATH);
 
-                // Jika ada folder ktp/
-                if (str_contains($warga->ktp, '/ktp/')) {
-                    $publicId = 'ktp/' . $publicId;
-                }
+                // Ambil nama file tanpa ekstensi
+                $filename = pathinfo($path, PATHINFO_FILENAME);
 
-                Cloudinary::destroy($publicId);
+                // Tentukan public_id
+                $publicId = str_contains($path, '/ktp/')
+                    ? 'ktp/' . $filename
+                    : $filename;
+
+                // ✅ CARA BENAR HAPUS CLOUDINARY
+                Cloudinary::uploadApi()->destroy($publicId);
 
             } catch (\Exception $e) {
                 Log::warning('Gagal hapus KTP Cloudinary: ' . $e->getMessage());
