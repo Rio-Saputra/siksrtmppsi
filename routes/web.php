@@ -4,14 +4,14 @@ use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\KegiatanController;
-use App\Http\Controllers\WargaController;
 use App\Http\Controllers\User\PermintaanKegiatanController as UserPermintaan;
 use App\Http\Controllers\Admin\PermintaanKegiatanController as AdminPermintaan;
 use App\Http\Controllers\User\ProfileController;
+use App\Http\Controllers\Admin\WargaController;
+
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
 Route::post('/profile/update', [ProfileController::class, 'update'])->name('profile.update');
-
 
 
 // USER
@@ -39,6 +39,11 @@ Route::get('/admin/about', function () {
 
 Route::get('/admin/warga', [App\Http\Controllers\Admin\WargaController::class, 'index'])
      ->name('admin.warga');
+
+
+Route::delete('/admin/warga/{id}', [WargaController::class, 'destroy'])
+    ->name('admin.warga.destroy');
+
 
 Route::get('/admin/kegiatan', [KegiatanController::class, 'index'])->name('admin.kegiatan');
 Route::post('/admin/kegiatan', [KegiatanController::class, 'store'])->name('admin.kegiatan.store');

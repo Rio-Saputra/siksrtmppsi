@@ -184,7 +184,7 @@
             <label>Password</label>
             <input type="password" name="password" placeholder="Masukkan password">
 
-            <a href="#" style="text-align:right; display:block;">Lupa Password?</a>
+            
 
             <button class="btn-login" type="submit">Masuk</button>
         </form>
