@@ -19,7 +19,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (app()->environment('production')) {
+        if (app()->environment('production') || request()->server('HTTP_X_FORWARDED_PROTO') == 'https') {
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
     }
