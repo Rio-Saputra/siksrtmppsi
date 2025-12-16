@@ -13,6 +13,13 @@ return new class extends Migration
     {
         Schema::create('permintaan_kegiatan', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->string('judul');
+            $table->text('deskripsi');
+            $table->date('tanggal');
+            $table->time('jam');
+            $table->string('lokasi');
+            $table->string('status')->default('pending'); // Default status
             $table->timestamps();
         });
     }

@@ -95,3 +95,16 @@ Route::get('/user/kegiatan',
 
 
 Route::post('/upload-cloudinary', [CloudinaryStorageController::class, 'upload']);
+
+// Temporary Remote Migration Route
+Route::get('/run-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate:refresh', [
+            '--path' => 'database/migrations/2025_12_16_061915_create_permintaan_kegiatan_table.php',
+            '--force' => true
+        ]);
+        return 'Migration Success: ' . \Illuminate\Support\Facades\Artisan::output();
+    } catch (\Exception $e) {
+        return 'Migration Failed: ' . $e->getMessage();
+    }
+});
