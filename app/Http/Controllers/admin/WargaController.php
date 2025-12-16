@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\Storage;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
 
 class WargaController extends Controller
 {
@@ -24,8 +25,14 @@ class WargaController extends Controller
         $warga = User::where('role', 'user')->findOrFail($id);
 
         // Hapus foto KTP jika ada
-        if ($warga->ktp && Storage::disk('public')->exists($warga->ktp)) {
-            Storage::disk('public')->delete($warga->ktp);
+        if ($warga->ktp) {
+             // Extract public ID (assuming simple folder structure 'ktp/filename')
+             $publicId = 'ktp/' . pathinfo($warga->ktp, PATHINFO_FILENAME);
+             try {
+                Cloudinary::destroy($publicId);
+             } catch (\Exception $e) {
+                 // Log error or ignore if already deleted
+             }
         }
 
         // Hapus data warga

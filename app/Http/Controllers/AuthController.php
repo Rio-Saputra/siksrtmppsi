@@ -36,7 +36,7 @@ class AuthController extends Controller
         // Upload KTP jika ada
         $ktpPath = null;
         if ($request->hasFile('ktp')) {
-            $ktpPath = $request->file('ktp')->store('ktp', 'public');
+            $ktpPath = $request->file('ktp')->storeOnCloudinary('ktp')->getSecurePath();
         }
 
         User::create([
