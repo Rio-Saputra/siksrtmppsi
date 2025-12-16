@@ -62,35 +62,7 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/debug-config', function () {
-    $config = config('filesystems.disks.cloudinary');
-    $env_vars = [
-        'CLOUDINARY_URL' => env('CLOUDINARY_URL'),
-        'CLOUDINARY_CLOUD_NAME' => env('CLOUDINARY_CLOUD_NAME'),
-        'CLOUDINARY_API_KEY' => env('CLOUDINARY_API_KEY'),
-        'CLOUDINARY_API_SECRET' => env('CLOUDINARY_API_SECRET'),
-        'CLOUDINARY_NAME' => env('CLOUDINARY_NAME'),
-        'CLOUDINARY_KEY' => env('CLOUDINARY_KEY'),
-        'CLOUDINARY_SECRET' => env('CLOUDINARY_SECRET'),
-    ];
 
-    try {
-        $storage = \Illuminate\Support\Facades\Storage::disk('cloudinary');
-        $status = "Storage Disk initialized successfully!";
-        // Try to get a URL to test internal config
-        $url = $storage->url('test.jpg');
-    } catch (\Exception $e) {
-        $status = "Error initializing disk: " . $e->getMessage();
-        $url = "N/A";
-    }
-
-    return response()->json([
-        'environment' => $env_vars,
-        'filesystem_config' => $config,
-        'status' => $status,
-        'generated_url' => $url,
-    ]);
-});
 
 // REGISTER & LOGIN
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
