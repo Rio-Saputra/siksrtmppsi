@@ -62,9 +62,15 @@ return [
 
         'cloudinary' => [
             'driver' => 'cloudinary',
-            'api_key' => env('CLOUDINARY_API_KEY'),
-            'api_secret' => env('CLOUDINARY_API_SECRET'),
-            'cloud_name' => env('CLOUDINARY_CLOUD_NAME'),
+            'cloud' => [
+                'cloud_name' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
+                'api_key'    => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
+                'api_secret' => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
+            ],
+            // Fallback flat keys just in case
+            'cloud_name' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
+            'api_key'    => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
+            'api_secret' => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
         ],
 
     ],
