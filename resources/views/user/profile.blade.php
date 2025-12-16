@@ -158,13 +158,10 @@
 
 <div class="profile-container">
 
-    <!-- FOTO PROFIL -->
+    <!-- HEADER -->
     <div class="profile-header">
         <div class="profile-icon">
-          <img src="{{ asset('images/Logo.png') }}" 
-     alt="Logo Profil" 
-     class="profile-photo">
-
+            <img src="{{ asset('images/Logo.png') }}" alt="Logo Profil">
         </div>
 
         <h2 class="profile-title">Profile Saya</h2>
@@ -172,6 +169,7 @@
         <button class="btn-edit" onclick="openModal()">Edit Profil</button>
     </div>
 
+    <!-- INFO -->
     <div class="profile-info">
 
         <div class="info-group">
@@ -196,13 +194,17 @@
 
         <div class="info-group">
             <div class="info-label">Foto KTP</div>
-            <img src="{{ asset('storage/'.$user->ktp) }}" class="ktp-photo">
+
+            @if ($user->ktp)
+                <img src="{{ $user->ktp }}" class="ktp-photo" alt="Foto KTP">
+            @else
+                <div class="info-value">Belum upload KTP</div>
+            @endif
         </div>
 
     </div>
 
 </div>
-
 
 <!-- ===================== MODAL EDIT ===================== -->
 <div class="modal" id="editModal">
@@ -215,7 +217,7 @@
 
             <div class="form-group">
                 <label>Nama Lengkap</label>
-                <input type="text" name="name" value="{{ $user->name }}">
+                <input type="text" name="name" value="{{ $user->name }}" required>
             </div>
 
             <div class="form-group">
@@ -232,14 +234,21 @@
                 <input type="text" name="nik" value="{{ $user->nik }}">
             </div>
 
+            @if ($user->ktp)
+                <div class="form-group">
+                    <label>KTP Saat Ini</label><br>
+                    <img src="{{ $user->ktp }}" class="ktp-photo" style="max-width:250px">
+                </div>
+            @endif
+
             <div class="form-group">
-                <label>Foto KTP (Upload Baru)</label>
-                <input type="file" name="ktp">
+                <label>Upload Foto KTP Baru</label>
+                <input type="file" name="ktp" accept="image/*">
             </div>
 
             <div class="form-group">
                 <label>Email</label>
-                <input type="email" name="email" value="{{ $user->email }}">
+                <input type="email" name="email" value="{{ $user->email }}" required>
             </div>
 
             <button type="submit" class="btn-save">Simpan Perubahan</button>

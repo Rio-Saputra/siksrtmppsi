@@ -5,6 +5,8 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use CloudinaryLabs\CloudinaryLaravel\Facades\Cloudinary;
+use Illuminate\Support\Facades\Log;
 
 class ProfileController extends Controller
 {
@@ -13,7 +15,7 @@ class ProfileController extends Controller
      */
     public function index()
     {
-        $user = Auth::user(); 
+        $user = Auth::user();
         return view('user.profile', compact('user'));
     }
 
@@ -26,32 +28,50 @@ class ProfileController extends Controller
 
         // Validasi
         $request->validate([
-            'name'      => 'required|string|max:100',
-            'gender'    => 'nullable|in:Laki-laki,Perempuan',
-            'nik'       => 'nullable|max:16',
-            'ktp'       => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
-            'email'     => 'required|email|max:100',
+            'name'   => 'required|string|max:100',
+            'gender' => 'nullable|in:Laki-laki,Perempuan',
+            'nik'    => 'nullable|max:16',
+            'ktp'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+            'email'  => 'required|email|max:100',
         ]);
 
-        // Update data yang bukan file
+        // Update data non-file
         $user->name   = $request->name;
         $user->gender = $request->gender;
         $user->nik    = $request->nik;
         $user->email  = $request->email;
 
         // ======================
-        // HANDLE FOTO KTP
+        // HANDLE FOTO KTP (CLOUDINARY)
         // ======================
         if ($request->hasFile('ktp')) {
 
-            // Hapus file lama jika ada
-            if ($user->ktp && file_exists(storage_path('app/public/' . $user->ktp))) {
-                unlink(storage_path('app/public/' . $user->ktp));
+            // Hapus KTP lama di Cloudinary jika ada
+            if ($user->ktp) {
+                try {
+                    $path = parse_url($user->ktp, PHP_URL_PATH);
+                    $filename = pathinfo($path, PATHINFO_FILENAME);
+
+                    $publicId = str_contains($path, '/ktp/')
+                        ? 'ktp/' . $filename
+                        : $filename;
+
+                    Cloudinary::uploadApi()->destroy($publicId);
+                } catch (\Exception $e) {
+                    Log::warning('Gagal hapus KTP lama: ' . $e->getMessage());
+                }
             }
 
-            // Upload baru
-            $path = $request->file('ktp')->store('ktp', 'public');
-            $user->ktp = $path;
+            // Upload KTP baru ke Cloudinary
+            $upload = Cloudinary::upload(
+                $request->file('ktp')->getRealPath(),
+                [
+                    'folder' => 'ktp'
+                ]
+            );
+
+            // Simpan URL Cloudinary ke database
+            $user->ktp = $upload->getSecurePath();
         }
 
         $user->save();
