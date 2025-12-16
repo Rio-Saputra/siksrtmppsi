@@ -367,7 +367,16 @@ function showDetail(name, gender, nik, email, ktp){
   document.getElementById('detailGender').innerText = gender;
   document.getElementById('detailNIK').innerText = nik;
   document.getElementById('detailEmail').innerText = email;
-  document.getElementById('detailKTP').src = ktp ? '/storage/'+ktp : '';
+  if (ktp) {
+      if (ktp.startsWith('http')) {
+          document.getElementById('detailKTP').src = ktp;
+      } else {
+          document.getElementById('detailKTP').src = '/storage/' + ktp;
+      }
+  } else {
+      document.getElementById('detailKTP').src = ''; // Placeholder or empty
+      // Optional: hide image if no KTP
+  }
   document.getElementById('detailModal').style.display = 'flex';
 }
 
