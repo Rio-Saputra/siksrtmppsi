@@ -8,6 +8,7 @@ use App\Http\Controllers\User\PermintaanKegiatanController as UserPermintaan;
 use App\Http\Controllers\Admin\PermintaanKegiatanController as AdminPermintaan;
 use App\Http\Controllers\User\ProfileController;
 use App\Http\Controllers\Admin\WargaController;
+use App\Http\Controllers\CloudinaryStorageController;
 
 
 Route::get('/profile', [ProfileController::class, 'index'])->name('profile');
@@ -88,3 +89,4 @@ Route::get('/user/kegiatan',
 )->name('user.kegiatan');
 
 
+Route::post('/upload-cloudinary', [CloudinaryStorageController::class, 'upload']);

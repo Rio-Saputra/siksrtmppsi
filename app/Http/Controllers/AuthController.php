@@ -94,5 +94,16 @@ class AuthController extends Controller
         Auth::logout();
         return redirect()->route('login');
     }
+
+    public function store(Request $request)
+{
+    $result = $request->file('image')->storeOnCloudinary();
+    
+    // Ambil URL aman (https)
+    $url = $result->getSecurePath();
+    
+    // Simpan $url ke database TiDB
+    // ...
+}
     
 }
