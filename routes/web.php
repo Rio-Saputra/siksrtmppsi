@@ -95,3 +95,23 @@ Route::get('/user/kegiatan',
 
 
 Route::post('/upload-cloudinary', [CloudinaryStorageController::class, 'upload']);
+
+// Temporary Route to Create Admin
+Route::get('/setup-admin', function () {
+    try {
+        \App\Models\User::updateOrCreate(
+            ['email' => 'admin@gmail.com'],
+            [
+                'name' => 'Administrator',
+                'nik' => '1234567890123456',
+                'password' => \Illuminate\Support\Facades\Hash::make('admin123'),
+                'gender' => 'Laki-laki',
+                'role' => 'admin',
+                'ktp' => null
+            ]
+        );
+        return 'Admin created: admin@gmail.com / admin123';
+    } catch (\Exception $e) {
+        return 'Error: ' . $e->getMessage();
+    }
+});
