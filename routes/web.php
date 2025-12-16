@@ -62,6 +62,11 @@ Route::get('/admin/kegiatan', [AdminController::class, 'kegiatan'])->name('admin
 
 
 
+// HOMEPAGE
+Route::get('/', function () {
+    return view('welcome');
+});
+
 // REGISTER & LOGIN
 Route::get('/register', [AuthController::class, 'showRegister'])->name('register');
 Route::post('/register', [AuthController::class, 'register']);
