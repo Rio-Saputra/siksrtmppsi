@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('kegiatan', function (Blueprint $table) {
             $table->id();
+            $table->string('judul');
+            $table->text('deskripsi')->nullable();
+            $table->date('tanggal');
+            $table->time('jam')->nullable();
+            $table->string('lokasi')->nullable();
             $table->timestamps();
         });
     }
