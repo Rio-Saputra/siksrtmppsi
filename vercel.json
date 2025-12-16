@@ -9,7 +9,8 @@
     },
     "routes": [
         {
-            "handle": "filesystem"
+            "src": "/(images/.*|favicon.ico|robots.txt|css/.*|js/.*|storage/.*|build/.*)",
+            "dest": "/$1"
         },
         {
             "src": "/(.*)",
