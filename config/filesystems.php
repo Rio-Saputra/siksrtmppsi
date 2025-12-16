@@ -62,22 +62,13 @@ return [
 
         'cloudinary' => [
             'driver' => 'cloudinary',
-            'cloud_url' => 'cloudinary://' . (env('CLOUDINARY_API_KEY') ?? env('CLOUDINARY_KEY')) . ':' . (env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET')) . '@' . (env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME')),
-            'cloud' => [
-                'cloud_name' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
-                'api_key'    => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
-                'api_secret' => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
-                'key'        => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
-                'secret'     => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
-                'name'       => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
-            ],
-            // Top level keys (CRITICAL: cloud_name string must exist to prevent Type Error)
-            'cloud_name' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
+            'cloud' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'), // Must be string to avoid TypeError
+            'cloud_name' => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'), // Alias
             'api_key'    => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
             'api_secret' => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
             'key'        => env('CLOUDINARY_API_KEY')    ?? env('CLOUDINARY_KEY'),
             'secret'     => env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET'),
-            'name'       => env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME'),
+            'cloud_url'  => 'cloudinary://' . (env('CLOUDINARY_API_KEY') ?? env('CLOUDINARY_KEY')) . ':' . (env('CLOUDINARY_API_SECRET') ?? env('CLOUDINARY_SECRET')) . '@' . (env('CLOUDINARY_CLOUD_NAME') ?? env('CLOUDINARY_NAME')),
         ],
 
     ],
